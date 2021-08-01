@@ -19,6 +19,23 @@ func createRepository() *FavoriteEventRepository {
 	}
 }
 
+func TestGetProviderData(t *testing.T) {
+	t.Run("データを取得できること", func(t *testing.T) {
+		repo := createRepository()
+
+		repo.CreateProvider("user2")
+
+		result := repo.GetProviderData("user2")
+
+		if result == nil {
+			t.Fatalf("expected data, result nil")
+		}
+
+		db := NewDynamoDBSession("local")
+		db.Table("provider-store").Delete("eventProviderId", "user2").Run()
+	})
+}
+
 func TestCreateProvider(t *testing.T) {
 	t.Run("エラーが発生しないこと", func(t *testing.T) {
 		repo := createRepository()

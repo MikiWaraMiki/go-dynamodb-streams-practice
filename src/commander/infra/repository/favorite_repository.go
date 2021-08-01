@@ -23,6 +23,16 @@ type ProviderTableItem struct {
 func (repo FavoriteEventRepository) Store(event AddTweetFavoriteEvent) {
 }
 
+func (repo FavoriteEventRepository) GetProviderData(userId string) *ProviderTableItem {
+	providerTable := repo.db.Table("provider-store")
+
+	var item ProviderTableItem
+
+	providerTable.Get("eventProviderId", userId).Consistent(true).One(&item)
+
+	return &item
+}
+
 func (repo FavoriteEventRepository) CreateProvider(userId string) error {
 	// Create Provider Table Record if not exists
 	providerTable := repo.db.Table("provider-store")
