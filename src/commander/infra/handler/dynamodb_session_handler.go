@@ -1,7 +1,10 @@
 package infra_handler
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
 )
@@ -19,16 +22,22 @@ func NewDynamoDBSession(environment string) *dynamo.DB {
 }
 
 func generateLocalDynamodbSession() *dynamo.DB {
-	session := session.Must(
-		session.NewSessionWithOptions(session.Options{
-			Profile: "localstack",
-		}),
-	)
-	db := dynamo.New(session, &aws.Config{
-		Region:     aws.String("us-east-2"),
-		Endpoint:   aws.String("localhost:8000"),
-		DisableSSL: aws.Bool(true),
+	session, err := session.NewSession(&aws.Config{
+		Region:   aws.String("us-east-2"),
+		Endpoint: aws.String("http://localhost:8000"),
+		Credentials: credentials.NewStaticCredentials(
+			"dummy",
+			"dummy",
+			"dummy",
+		),
 	})
+
+	if err != nil {
+		fmt.Printf("%v \n", err)
+		panic(err)
+	}
+
+	db := dynamo.New(session)
 
 	return db
 }
