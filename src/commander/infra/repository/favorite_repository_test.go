@@ -3,7 +3,9 @@ package infra_repository
 import (
 	"testing"
 
+	. "github.com/MikiWaraMiki/go-dynamodb-streams-practice/src/commander/application/event"
 	. "github.com/MikiWaraMiki/go-dynamodb-streams-practice/src/commander/infra/handler"
+
 	"github.com/guregu/dynamo"
 )
 
@@ -17,6 +19,19 @@ func createRepository() *FavoriteEventRepository {
 	return &FavoriteEventRepository{
 		db: db,
 	}
+}
+
+func TestStore(t *testing.T) {
+	t.Run("ロック競合が起きない場合は処理が正常に終了すること", func(t *testing.T) {
+		repo := createRepository()
+		event := AddTweetFavoriteEvent{
+			TweetId: "tweet1",
+			UserId:  "user1",
+		}
+		if err := repo.Store(event); err != nil {
+			t.Fatalf("error %v", err)
+		}
+	})
 }
 
 func TestGetProviderData(t *testing.T) {
