@@ -10,8 +10,8 @@ type TweetFavoriteEventCommandProcessor struct {
 }
 
 func (command TweetFavoriteEventCommandProcessor) Execute(
-	user User,
-	tweet Tweet,
+	user *User,
+	tweet *Tweet,
 ) error {
 	event := AddTweetFavoriteEvent{
 		UserId:  user.Id(),

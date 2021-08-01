@@ -2,6 +2,7 @@ package domain_model_user
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -22,6 +23,17 @@ func NewUserID(id string) (*UserID, error) {
 	return &UserID{
 		value: id,
 	}, nil
+}
+
+func GenerateUserId() (*UserID, error) {
+	id, err := uuid.NewRandom()
+
+	if err != nil {
+		fmt.Printf("failed generate uuid")
+		return nil, err
+	}
+
+	return NewUserID(id.String())
 }
 
 func isValidateUUID(id string) bool {
