@@ -8,9 +8,9 @@ type TweetFavoriteEventBody struct {
 }
 
 type AddTweetFavoriteEvent struct {
-	userId         string
-	sequenceNumber int
-	eventType      string
-	body           TweetFavoriteEventBody
-	createdAt      time.Time
+	UserId         string
+	SequenceNumber int
+	EventType      string
+	Body           TweetFavoriteEventBody
+	CreatedAt      time.Time
 }
