@@ -6,6 +6,7 @@ import (
 )
 
 type TweetFavoriteEventCommandProcessor struct {
+	favoriteRepository FavoriteRepository
 }
 
 func (command TweetFavoriteEventCommandProcessor) Execute(
