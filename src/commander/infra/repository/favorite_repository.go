@@ -38,7 +38,7 @@ func (repo FavoriteEventRepository) CreateProvider(userId string) error {
 
 	if err != nil {
 		if ae, ok := err.(awserr.RequestFailure); ok && ae.Code() == "ConditionalCheckFailedException" {
-			fmt.Printf("already provider is exist")
+			fmt.Printf("already provider is exist\n")
 			return nil
 		}
 		fmt.Printf("failed to put item[%v]\n", err)
