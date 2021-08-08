@@ -38,7 +38,7 @@ func SetUp() (*User, *Tweet, error) {
 
 func TestExecute(t *testing.T) {
 	t.Run("保存に成功した場合は、errorを返さないこと", func(t *testing.T) {
-		repo := MockFailedCaseFavoriteRepository{}
+		repo := MockSuccessCaseFavoriteRepository{}
 		command := TweetFavoriteEventCommandProcessor{
 			favoriteRepository: repo,
 		}
@@ -50,6 +50,22 @@ func TestExecute(t *testing.T) {
 
 		if result := command.Execute(user, tweet); result != nil {
 			t.Fatalf("expected not error, but error happen. error: %v", err)
+		}
+	})
+
+	t.Run("保存に失敗した場合は、errorを返すこと", func(t *testing.T) {
+		repo := MockFailedCaseFavoriteRepository{}
+		command := TweetFavoriteEventCommandProcessor{
+			favoriteRepository: repo,
+		}
+		user, tweet, err := SetUp()
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if result := command.Execute(user, tweet); result == nil {
+			t.Fatalf("expected error happen, but error is nil")
 		}
 	})
 }
