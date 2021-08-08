@@ -31,7 +31,6 @@ func (ur *UserRepositoryImpl) FindById(id *UserID) (*User, error) {
 		return nil, err
 	}
 
-	userId, _ := NewUserID(userDto.UUID)
-	user := NewUser(userId)
+	user := NewUser(id)
 	return user, nil
 }
