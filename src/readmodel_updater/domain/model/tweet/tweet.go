@@ -1,21 +1,21 @@
 package domain_model_tweet
 
 type Tweet struct {
-	id   int
-	body string
+	id      *TweetID
+	content string
 }
 
-func NewTweet(id int, body string) *Tweet {
+func NewTweet(id *TweetID, content string) *Tweet {
 	return &Tweet{
-		id:   id,
-		body: body,
+		id:      id,
+		content: content,
 	}
 }
 
-func (t Tweet) Id() int {
-	return t.id
+func (t Tweet) Id() string {
+	return t.id.value
 }
 
-func (t Tweet) Body() string {
-	return t.body
+func (t Tweet) Content() string {
+	return t.content
 }
