@@ -1,4 +1,4 @@
-package favorite_tweet
+package domain_model_favorite_tweet
 
 import (
 	. "github.com/MikiWaraMiki/go-dynamodb-streams-practice/src/readmodel_updater/domain/model/tweet"
@@ -6,15 +6,25 @@ import (
 )
 
 type FavoriteTweet struct {
-	user_id  string
-	tweet_id string
-	content  string
+	user  *User
+	tweet *Tweet
 }
 
-func NewFavoriteTweet(user_id *UserID, tweet *Tweet) *FavoriteTweet {
+func NewFavoriteTweet(user *User, tweet *Tweet) *FavoriteTweet {
 	return &FavoriteTweet{
-		user_id:  user_id.Value(),
-		tweet_id: tweet.Id(),
-		content:  tweet.Content(),
+		user:  user,
+		tweet: tweet,
 	}
+}
+
+func (ft *FavoriteTweet) UserId() string {
+	return user.Id()
+}
+
+func (ft *FavoriteTweet) TweetId() string {
+	return tweet.Id()
+}
+
+func (ft *FavoriteTweet) Content() string {
+	return tweet.Content()
 }
