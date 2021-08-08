@@ -9,6 +9,12 @@ type TweetFavoriteEventCommandProcessor struct {
 	favoriteRepository FavoriteRepository
 }
 
+func NewTweetFavoriteEventCommandProcessor(repo FavoriteRepository) *TweetFavoriteEventCommandProcessor {
+	return &TweetFavoriteEventCommandProcessor{
+		favoriteRepository: repo,
+	}
+}
+
 func (command TweetFavoriteEventCommandProcessor) Execute(
 	user *User,
 	tweet *Tweet,
