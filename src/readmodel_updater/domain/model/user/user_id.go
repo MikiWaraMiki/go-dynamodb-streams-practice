@@ -30,6 +30,6 @@ func isValidateUUID(id string) bool {
 	return err == nil
 }
 
-func (id UserId) Value() string {
+func (id *UserID) Value() string {
 	return id.value
 }
