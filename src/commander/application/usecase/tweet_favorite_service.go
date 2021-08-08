@@ -7,7 +7,13 @@ import (
 )
 
 type TweetFavoriteService struct {
-	command TweetFavoriteEventCommandProcessor
+	command *TweetFavoriteEventCommandProcessor
+}
+
+func NewTweetFavoriteService(command *TweetFavoriteEventCommandProcessor) *TweetFavoriteService {
+	return &TweetFavoriteService{
+		command: command,
+	}
 }
 
 func (sv TweetFavoriteService) AddFavorite(tweetIdStr string, userIdStr string) error {
