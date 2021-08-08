@@ -16,7 +16,7 @@ func getEnv(key string, fallback string) string {
 	return fallback
 }
 
-func GormConnect() *gorm.DB {
+func NewGormConnection() *gorm.DB {
 	DBMS := "mysql"
 	USER := getEnv("DB_USER", "root")
 	PASSWORD := getEnv("DB_PASSWORD", "password")
