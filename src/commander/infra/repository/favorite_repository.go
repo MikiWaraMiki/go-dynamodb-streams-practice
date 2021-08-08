@@ -10,8 +10,14 @@ import (
 	"github.com/guregu/dynamo"
 )
 
-type FavoriteEventRepository struct {
+type FavoriteEventRepositoryImpl struct {
 	db *dynamo.DB
+}
+
+func NewFavoriteEventRepository(db *dynamo.DB) *FavoriteEventRepositoryImpl {
+	return &FavoriteEventRepositoryImpl{
+		db: db,
+	}
 }
 
 type ProviderTableItem struct {
@@ -27,7 +33,7 @@ type EventStoreItem struct {
 	Body            map[string]string `dynamo:"body"`
 }
 
-func (repo FavoriteEventRepository) Store(event AddTweetFavoriteEvent) error {
+func (repo FavoriteEventRepositoryImpl) Store(event AddTweetFavoriteEvent) error {
 	var err error
 
 	if err = repo.CreateProvider(event.UserId); err != nil {
@@ -73,7 +79,7 @@ func (repo FavoriteEventRepository) Store(event AddTweetFavoriteEvent) error {
 	return nil
 }
 
-func (repo FavoriteEventRepository) GetProviderData(userId string) *ProviderTableItem {
+func (repo FavoriteEventRepositoryImpl) GetProviderData(userId string) *ProviderTableItem {
 	providerTable := repo.db.Table("provider-store")
 
 	var item ProviderTableItem
@@ -83,7 +89,7 @@ func (repo FavoriteEventRepository) GetProviderData(userId string) *ProviderTabl
 	return &item
 }
 
-func (repo FavoriteEventRepository) CreateProvider(userId string) error {
+func (repo FavoriteEventRepositoryImpl) CreateProvider(userId string) error {
 	// Create Provider Table Record if not exists
 	providerTable := repo.db.Table("provider-store")
 

@@ -13,10 +13,10 @@ func createDbSession() *dynamo.DB {
 	return NewDynamoDBSession("local")
 }
 
-func createRepository() *FavoriteEventRepository {
+func createRepository() *FavoriteEventRepositoryImpl {
 	db := createDbSession()
 
-	return &FavoriteEventRepository{
+	return &FavoriteEventRepositoryImpl{
 		db: db,
 	}
 }
