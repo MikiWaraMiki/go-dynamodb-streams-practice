@@ -10,7 +10,7 @@ type TweetFavoriteService struct {
 	command TweetFavoriteEventCommandProcessor
 }
 
-func (sv TweetFavoriteService) addFavorite(tweetIdStr string, userIdStr string) error {
+func (sv TweetFavoriteService) AddFavorite(tweetIdStr string, userIdStr string) error {
 	tweetId, err := NewTweetId(tweetIdStr)
 	if err != nil {
 		return err
