@@ -3,7 +3,7 @@ package infra_repository
 import (
 	"time"
 
-	. "github.com/MikiWaraMiki/go-dynamodb-streams-practice/src/readmodel_updater/domain/model/faovirte_tweet"
+	. "github.com/MikiWaraMiki/go-dynamodb-streams-practice/src/readmodel_updater/domain/model/favorite_tweet"
 	"gorm.io/gorm"
 )
 
@@ -27,16 +27,16 @@ func NewFavoriteTweetRepository(conn *gorm.DB) *FavoriteTweetRepositoryImpl {
 }
 
 func (repo *FavoriteTweetRepositoryImpl) InsertOne(favoriteTweet *FavoriteTweet) error {
-	insertTime := time.Now()
 	favoriteTweetDto := FavoriteTweetDto{
 		UserUUID:  favoriteTweet.UserId(),
 		TweetID:   favoriteTweet.TweetId(),
 		Content:   favoriteTweet.Content(),
-		CreatedAt: &insertTime,
-		UpdatedAt: &insertTime,
+		CreatedAt: nil,
+		UpdatedAt: nil,
 	}
 
-	err := repo.Conn.Select("user_uuid", "tweet_id", "content", "created_at", "updated_at").
+	err := repo.Conn.Table("favorite_tweets").
+		Select("UserUUID", "TweetID", "Content").
 		Create(&favoriteTweetDto).Error
 
 	if err != nil {

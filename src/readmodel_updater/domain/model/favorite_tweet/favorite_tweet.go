@@ -18,13 +18,13 @@ func NewFavoriteTweet(user *User, tweet *Tweet) *FavoriteTweet {
 }
 
 func (ft *FavoriteTweet) UserId() string {
-	return user.Id()
+	return ft.user.Id()
 }
 
 func (ft *FavoriteTweet) TweetId() string {
-	return tweet.Id()
+	return ft.tweet.Id()
 }
 
 func (ft *FavoriteTweet) Content() string {
-	return tweet.Content()
+	return ft.tweet.Content()
 }
