@@ -12,10 +12,10 @@ type UserRepositoryImpl struct {
 }
 
 type UserDto struct {
-	UUID      string
-	Name      string
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
+	UUID      string    `gorm:"column:uuid"`
+	Name      string    `gorm:"column:name"`
+	CreatedAt time.Time `gorm:"column:created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at"`
 }
 
 func NewUserRepository(conn *gorm.DB) *UserRepositoryImpl {
@@ -32,5 +32,6 @@ func (ur *UserRepositoryImpl) FindById(id *UserID) (*User, error) {
 	}
 
 	userId, _ := NewUserID(userDto.UUID)
-	return NewUser(userId), nil
+	user := NewUser(userId)
+	return user, nil
 }

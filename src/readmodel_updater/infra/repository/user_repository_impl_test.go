@@ -7,7 +7,7 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	. "github.com/MikiWaraMiki/go-dynamodb-streams-practice/src/readmodel_updater/domain/model/user"
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -44,17 +44,32 @@ func TestUserRepositoryTestSuite(t *testing.T) {
 }
 
 func (suite *UserRepositoryImplTestSuite) TestFindById() {
-	suite.Run("ユーザーが存在する場合はエラーが発生しない", func() {
-		uuid, _ := uuid.NewRandom()
-		userId, _ := NewUserID(uuid.String())
+	suite.Run("ユーザーが存在する場合はユーザオブジェクトを返すこと", func() {
+		id, _ := uuid.NewRandom()
+		userId, _ := NewUserID(id.String())
 
 		suite.mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM ` + "`users`" + ` WHERE uuid = ?`)).
 			WithArgs(userId.Value()).
-			WillReturnRows(sqlmock.NewRows([]string{"id", "name"}).
+			WillReturnRows(sqlmock.NewRows([]string{"uuid", "name"}).
 				AddRow(userId.Value(), "hogehoge"))
+
+		user, err := suite.userRepository.FindById(userId)
+
+		assert.Nil(suite.T(), err)
+
+		assert.Equal(suite.T(), userId.Value(), user.Id())
+	})
+
+	suite.Run("ユーザが存在しない場合はエラーを返すこと", func() {
+		id, _ := uuid.NewRandom()
+		userId, _ := NewUserID(id.String())
+
+		suite.mock.ExpectQuery(regexp.QuoteMeta(`SELECT * FROM ` + "`users`" + ` WHERE uuid = ?`)).
+			WithArgs(userId.Value()).
+			WillReturnError(gorm.ErrRecordNotFound)
 
 		_, err := suite.userRepository.FindById(userId)
 
-		require.NoError(suite.T(), err)
+		assert.NotNil(suite.T(), err)
 	})
 }
