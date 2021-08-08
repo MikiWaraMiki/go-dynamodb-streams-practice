@@ -1,7 +1,6 @@
 package infra_repository
 
 import (
-	"errors"
 	"time"
 
 	. "github.com/MikiWaraMiki/go-dynamodb-streams-practice/src/readmodel_updater/domain/model/user"
@@ -13,9 +12,7 @@ type UserRepositoryImpl struct {
 }
 
 type UserDto struct {
-	gorm.Model
-
-	Id        string
+	UUID      string
 	Name      string
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
@@ -28,14 +25,12 @@ func NewUserRepository(conn *gorm.DB) *UserRepositoryImpl {
 }
 
 func (ur *UserRepositoryImpl) FindById(id *UserID) (*User, error) {
-	userDto := UserDto{
-		Id: id.Value(),
+	var userDto UserDto
+
+	if err := ur.Conn.Table("users").Where("uuid = ?", id.Value()).Find(&userDto).Error; err != nil {
+		return nil, err
 	}
 
-	if err := ur.Conn.First(&userDto).Error; err != nil {
-		return nil, errors.New("user is not found")
-	}
-
-	userId, _ := NewUserID(userDto.Id)
-	return NewUser(userId)
+	userId, _ := NewUserID(userDto.UUID)
+	return NewUser(userId), nil
 }
