@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +17,6 @@ func getEnv(key string, fallback string) string {
 }
 
 func NewGormConnection() *gorm.DB {
-	DBMS := "mysql"
 	USER := getEnv("DB_USER", "root")
 	PASSWORD := getEnv("DB_PASSWORD", "password")
 	HOSTNAME := getEnv("DB_HOSTNAME", "localhost")
@@ -27,7 +26,7 @@ func NewGormConnection() *gorm.DB {
 
 	CONNECT := USER + ":" + PASSWORD + "@" + PROTOCOL + "/" + DB_NAME
 
-	db, err := gorm.Open(DBMS, CONNECT)
+	db, err := gorm.Open(mysql.Open(CONNECT), &gorm.Config{})
 
 	if err != nil {
 		return nil
