@@ -4,6 +4,7 @@
 
 ### Go ###
 # Binaries for programs and plugins
+**/cmd/
 *.exe
 *.exe~
 *.dll
@@ -57,3 +58,4 @@ Temporary Items
 # datas
 docker/db/mysql/data
 docker/dynamodb/data
+**/cmd/*
