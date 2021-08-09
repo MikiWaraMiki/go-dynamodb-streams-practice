@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
+	github.com/aws/aws-lambda-go v1.26.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/gorm v1.9.16 // indirect
