@@ -68,5 +68,47 @@ export class AwsCdkStack extends cdk.Stack {
         },
       }),
     });
+    const readModelUpdaterFunction = new lambda.Function(
+      this,
+      "ReadModelUpdaterFunction",
+      {
+        functionName: "readmodel-updater",
+        handler: "main",
+        runtime: lambda.Runtime.GO_1_X,
+        role: lambdaRole,
+        environment: {
+          // NOTE: YOU NEED CHANGE
+          DB_USER: "root",
+          DB_PASSWORD: "password",
+          HOSTNAME: "localhost",
+          DB_NAME: "examples",
+          PORT: "3306",
+        },
+        timeout: Duration.seconds(60),
+        code: Code.fromAsset(
+          resolve(__dirname, "../../src/readmodel_updater/"),
+          {
+            assetHashType: AssetHashType.OUTPUT,
+            bundling: {
+              image: Runtime.GO_1_X.bundlingImage,
+              command: [
+                "bash",
+                "-c",
+                "GOOS=linux GOARCH=amd64 go build -o /asset-output/main",
+              ],
+              user: "root",
+            },
+          }
+        ),
+      }
+    );
+    readModelUpdaterFunction.addEventSourceMapping(
+      "UpdateReadModelSourceMapping",
+      {
+        eventSourceArn: eventStoreTable.tableStreamArn,
+        batchSize: 10,
+        startingPosition: lambda.StartingPosition.LATEST,
+      }
+    );
   }
 }
