@@ -86,6 +86,19 @@ func (suite *AddFavoriteTweetServiceTestSuite) SetupTest() {
 }
 
 func (suite *AddFavoriteTweetServiceTestSuite) TestAddFavoriteTweet() {
+	suite.Run("正常に追加できた場合はエラーを返さない", func() {
+		uuid, _ := uuid.NewRandom()
+
+		service := NewAddFavoriteTweetService(
+			suite.userRepository,
+			suite.tweetRepository,
+			suite.favoriteTweetRepository,
+		)
+
+		err := service.AddFavoriteTweet(uuid.String(), uuid.String())
+
+		assert.Nil(suite.T(), err)
+	})
 	suite.Run("指定したIDのユーザが存在しな場合はエラーを返す", func() {
 		uuid, _ := uuid.NewRandom()
 
