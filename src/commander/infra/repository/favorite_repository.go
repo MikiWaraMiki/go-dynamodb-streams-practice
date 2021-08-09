@@ -51,6 +51,7 @@ func (repo FavoriteEventRepositoryImpl) Store(event AddTweetFavoriteEvent) error
 	body := map[string]string{}
 	body["eventId"] = "add-favorite"
 	body["tweetId"] = event.TweetId
+	body["userId"] = event.UserId
 	eventStoreItem := EventStoreItem{
 		EventProviderId: providerItem.EventProviderId,
 		Version:         providerItem.Version + 1,
