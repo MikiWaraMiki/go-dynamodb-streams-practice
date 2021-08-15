@@ -36,4 +36,5 @@ const lambdaStack = new AwsCdkLambdaStack(app, "DynamoLambdaStack", {
   vpc: vpcStack.vpc,
   lambdaSg: sgStack.lambdaSg,
   rdsProxy: rdsStack.rdsProxy,
+  dynamoStreamArn: dynamoDBStack.eventStoreTable.tableStreamArn ?? "",
 });
