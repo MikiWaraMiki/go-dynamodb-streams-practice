@@ -17,7 +17,7 @@ type FavoriteTweetDto struct {
 	TweetID   string     `gorm:"column:tweet_id"`
 	Content   string     `gorm:"column:content"`
 	CreatedAt *time.Time `gorm:"column:created_at"`
-	UpdatedAt *time.Time `gorm:"column:update_at"`
+	UpdatedAt *time.Time `gorm:"column:updated_at"`
 }
 
 func NewFavoriteTweetRepository(conn *gorm.DB) *FavoriteTweetRepositoryImpl {

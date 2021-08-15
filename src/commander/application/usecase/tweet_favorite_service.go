@@ -23,8 +23,7 @@ func (sv TweetFavoriteService) AddFavorite(tweetIdStr string, userIdStr string) 
 	}
 	tweet := NewTweet(tweetId)
 
-	// NOTE: デモなのでUserIDは都度生成
-	userId, err := GenerateUserId()
+	userId, err := NewUserID(userIdStr)
 	if err != nil {
 		return err
 	}
