@@ -46,6 +46,11 @@ export class AwsCdkSgStack extends cdk.Stack {
       ec2.Port.tcp(3306),
       "allow db connection from lambda"
     );
+    sg.addIngressRule(
+      this.bastionSg,
+      ec2.Port.tcp(3306),
+      "allow db connection from bastion"
+    );
 
     return sg;
   }

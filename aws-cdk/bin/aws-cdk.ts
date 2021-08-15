@@ -1,21 +1,39 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
-import { AwsCdkStack } from '../lib/aws-cdk-stack';
+import "source-map-support/register";
+import * as cdk from "@aws-cdk/core";
+import { AwsCdkStack } from "../lib/aws-cdk-stack";
+import { AwsCdkVpcStack } from "../lib/aws-cdk-vpc";
+import { AwsCdkBastionStack } from "../lib/aws-cdk-bastion";
+import { AwsCdkSgStack } from "../lib/aws-cdk-sg";
+import { AwsCdkRdsStack } from "../lib/aws-cdk-rds";
+import { AwsCdkLambdaStack } from "../lib/aws-cdk-lambda";
+import { AwsCdkDynamoDBStack } from "../lib/aws-cdk-dynamodb";
 
 const app = new cdk.App();
-new AwsCdkStack(app, 'AwsCdkStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+const vpcStack = new AwsCdkVpcStack(app, "DynamoVpcStack");
 
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
+const sgStack = new AwsCdkSgStack(app, "DynamoSecurityGroupStack", {
+  vpc: vpcStack.vpc,
+});
 
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+const bastionStack = new AwsCdkBastionStack(app, "DynamoBastionStack", {
+  vpc: vpcStack.vpc,
+  bastionSg: sgStack.bastionSg,
+});
+
+const rdsStack = new AwsCdkRdsStack(app, "DynamoRdsStack", {
+  vpc: vpcStack.vpc,
+  rdsSg: sgStack.rdsSg,
+  rdsProxySg: sgStack.rdsProxySg,
+});
+
+const dynamoDBStack = new AwsCdkDynamoDBStack(app, "DynamoDBStack");
+
+const lambdaStack = new AwsCdkLambdaStack(app, "DynamoLambdaStack", {
+  commanderSrcPath: "../../src/commander/",
+  updaterSrcPath: "../../src/readmodel_updater/",
+  vpc: vpcStack.vpc,
+  lambdaSg: sgStack.lambdaSg,
+  rdsProxy: rdsStack.rdsProxy,
 });

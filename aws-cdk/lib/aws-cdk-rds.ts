@@ -89,6 +89,7 @@ export class AwsCdkRdsStack extends cdk.Stack {
       debugLogging: true,
       vpc: this.vpc,
       securityGroups: [this.rdsProxySg],
+      requireTLS: false,
     });
   }
 }
