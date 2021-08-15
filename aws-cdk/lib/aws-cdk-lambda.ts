@@ -100,8 +100,11 @@ export class AwsCdkLambdaStack extends cdk.Stack {
       vpc: this.vpc,
       securityGroups: [this.lambdaSg],
       environment: {
-        PROXY_ENDPOINT: this.rdsProxy.endpoint,
-        RDS_SECRET_NAME: "stream-rds-credentials",
+        // TODO: アプリ側でSecrets Managerから取得する。検証目的のため環境変数にベタがき
+        DB_HOSTNAME: this.rdsProxy.endpoint,
+        DB_NAME: "examples",
+        DB_PASSWORD: "sample",
+        DB_USER: "admin",
       },
     });
     lambdaFunc.addEventSourceMapping("UpdateReadModelSourceMapping", {
